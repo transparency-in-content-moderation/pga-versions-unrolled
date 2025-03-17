@@ -10,8 +10,15 @@ platforms=(Bluesky Facebook Instagram LINE LinkedIn Parler Pinterest Quora Reddi
 policy_types=("Terms of Service" "Privacy Policy" "Community Guidelines")
 
 
+echo "$(date '+[%Y-%m-%d %H:%M:%S]') Unrolling PGA-Versions"
+
 target_prefix="$PWD/tmp-pga-versions-history"
-mkdir -p "$target_prefix"
+if [ -d "$target_prefix" ]; then
+    echo "Cleaning up $target_prefix/"
+    rm -r "$target_prefix"/*
+else
+    mkdir -p "$target_prefix"
+fi
 
 
 cd pga-versions
@@ -19,6 +26,9 @@ cd pga-versions
 
 # pull latest changes
 git pull origin main
+
+# count policy types
+ls */*.md | cut -d/ -f3 | sort | uniq -c | sort -k1,1nr
 
 
 for platform in "${platforms[@]}"; do
@@ -47,7 +57,9 @@ cd -
 
 
 echo "Moving policies of Twitter to X"
-mv "$target_prefix"/Twitter/* "$target_prefix"/X/
+for ptype in $(ls "$target_prefix"/Twitter/); do
+    mv -v "$target_prefix"/Twitter/"$ptype"/* "$target_prefix"/X/"$ptype"/
+done
 rm -r "$target_prefix"/Twitter/
 
 

@@ -15,7 +15,7 @@ The PGA-Versions repository is incorporated as a Git submodule. Updating is done
 
     git submodule update pga-versions
 
-The "unroll" will also perform an update.
+The "unroll" script will also perform an update.
 
 
 ## Unroll
@@ -27,4 +27,4 @@ The versions are written into the directory `tmp-pga-versions-history`.
 ## Deduplication and Metrics
 
 The PGA-Versions include duplicates where markup or links are different but the textual content is the same.
-Running the notebook [PGA-Versions-History](./PGA-Versions-History.ipynb) will extract the plain text, perform the deduplication and calculate some metrics. The metrics are written to [pga-versions-history.csv](./pga-versions-history.csv).
+Running the notebook [PGA-Versions-History](./PGA-Versions-History.ipynb) will extract the plain text, perform the deduplication and calculate some metrics. The metrics are written to [pga-versions-history.csv](./data/pga-versions-history.csv).
