@@ -5,6 +5,7 @@
 platforms=(Bluesky Facebook Instagram LINE LinkedIn Parler Pinterest Quora Reddit
            Snapchat Spotify Telegram Threads TikTok TruthSocial Twitch
            Twitter X WeChat WhatsApp YouTube)
+platforms_pga_corpus=(Facebook Instagram Twitter YouTube)
 
 # policy types available for (almost) all platforms
 policy_types=("Terms of Service" "Privacy Policy" "Community Guidelines")
@@ -31,6 +32,7 @@ git pull origin main
 ls */*.md | cut -d/ -f3 | sort | uniq -c | sort -k1,1nr
 
 
+# unroll pga-versions
 for platform in "${platforms[@]}"; do
     mkdir -p "$target_prefix"/$platform
     for ptype in "${policy_types[@]}"; do
@@ -54,6 +56,22 @@ for platform in "${platforms[@]}"; do
 done
 
 cd -
+
+# unroll pga-corpus
+for platform in "${platforms_pga_corpus[@]}"; do
+    echo "Adding versions from pga-corpus for $platform"
+    for ptype in "${policy_types[@]}"; do
+        srcdir=pga-corpus/Versions/Markdown/"$platform"/"$ptype"/
+        if ! [ -d "$srcdir" ]; then
+            echo "No '$ptype' for $platform"
+            continue
+        fi
+        _ptype=${ptype// /_}
+        tdir="$target_prefix"/"$platform"/"$_ptype"/
+        mkdir -p "$tdir"/
+        cp -p "$srcdir"/* "$tdir"/
+    done
+done
 
 
 echo "Moving policies of Twitter to X"
